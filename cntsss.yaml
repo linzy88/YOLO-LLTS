@@ -1,0 +1,11 @@
+# Train/val/test
+path: /home/lthpc/student/dataset/CNTSSS # dataset root dir
+train: train # train images (relative to 'path') 3274 images
+val: test # val images (relative to 'path') 786 images
+
+
+# Classes
+names:
+    0: prohibitory
+    1: mandatory
+    2: warning
