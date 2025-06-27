@@ -1,0 +1,12 @@
+# Train/val/test
+path: /home/lthpc/student/dataset/CCTSDB-2021 # dataset root dir
+train: images/train # train images (relative to 'path') 118287 images
+val: images/weather/night # val images (relative to 'path') 5000 images
+test: images/weather/night
+
+
+# Classes
+names:
+    0: warning
+    1: mandatory
+    2: prohibitory

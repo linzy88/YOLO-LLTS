@@ -1,0 +1,11 @@
+# Train/val/test
+path: /home/ai3/student/Dataset/CCTSDB2021 # dataset root dir
+train: images/train # train images (relative to 'path') 118287 images
+val: images/weather/rain # val images (relative to 'path') 5000 images
+
+
+# Classes
+names:
+    0: warning
+    1: mandatory
+    2: prohibitory
