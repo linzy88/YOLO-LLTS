@@ -50,6 +50,7 @@ Application Scenarios of Traffic Sign Detection in advanced driver-assistance sy
 * python 3.8
 * torch 1.11.0
 * torchvision 0.12.0
+
 To install requirements: 
 ```
 pip install -r requirements.txt
