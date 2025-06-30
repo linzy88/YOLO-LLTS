@@ -21,7 +21,7 @@ The CNTSSS dataset was collected across 17 cities in China, containing images ca
   </tr>
    <tr>
     <th>Baidu Cloud</th>
-    <th colspan="2"> <a href="https://pan.baidu.com/s/1dEtWBVt6UWAKkaOYBq3uDg">Download</a> </th> (Extraction code: dtrn)
+    <th colspan="2"> <a href="https://pan.baidu.com/s/1dEtWBVt6UWAKkaOYBq3uDg">Download</a> (Extraction code: dtrn)</th> 
   </tr>
 </tbody>
 </table>
