@@ -1284,6 +1284,37 @@ class SABlock(nn.Module):
         return att_weights
 
     
+class SEAttention(nn.Module):
+    def __init__(self, channel, reduction=16):
+        super().__init__()
+        self.avg_pool = nn.AdaptiveAvgPool2d(1)
+        self.fc = nn.Sequential(
+            nn.Linear(channel, channel // reduction, bias=False),
+            nn.ReLU(inplace=True),
+            nn.Linear(channel // reduction, channel, bias=False),
+            nn.Sigmoid()
+        )
+
+    def init_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                init.kaiming_normal_(m.weight, mode='fan_out')
+                if m.bias is not None:
+                    init.constant_(m.bias, 0)
+            elif isinstance(m, nn.BatchNorm2d):
+                init.constant_(m.weight, 1)
+                init.constant_(m.bias, 0)
+            elif isinstance(m, nn.Linear):
+                init.normal_(m.weight, std=0.001)
+                if m.bias is not None:
+                    init.constant_(m.bias, 0)
+
+    def forward(self, x):
+        b, c, _, _ = x.size()
+        y = self.avg_pool(x).view(b, c)
+        y = self.fc(y).view(b, c, 1, 1)
+        return x * y.expand_as(x)
+    
 '''
 --------------------------------------------------------------------HRFM-SOD module--------------------------------------------------------------------------------------
 '''
@@ -1304,8 +1335,13 @@ class CSSA_1(nn.Module):
             nn.Upsample(scale_factor=8, mode='bilinear', align_corners=True)  # upsample
         )
 
-        self.softmax_conv = Conv(c1 * 4, c1, 1,1)  # SoftMax Conv
-        self.conv3x3 = Conv(c1, c1, 3,1)
+        self.softmax_conv = Conv(c1 * 4, c1, 1, 1)  # SoftMax Conv
+        self.conv3x3 = Conv(c1, c1, 3, 1)
+
+        self.se1 = SEAttention(c1)
+        self.se2 = SEAttention(c1)
+        self.se3 = SEAttention(c1)
+        self.se4 = SEAttention(c1)
 
         self.ba1 = BABlock([c1, c1, c1], c1)
         self.ba2 = BABlock([c1, c1, c1], c1)
@@ -1336,12 +1372,12 @@ class CSSA_1(nn.Module):
         f3_c = self.upsample_f3(f3)  # (40*40*512)
         f4_c = self.upsample_f4(f4)  # (20*20*1024)
 
-        # CAM1
+        # attention
         f1_ap = self.feature_extraction(f1)
         f2_ap = self.feature_extraction(f2_c)
         f3_ap = self.feature_extraction(f3_c)
         f4_ap = self.feature_extraction(f4_c)
-        
+
         att_ba1 = self.ba1([f2_ap, f3_ap, f4_ap], f1_ap)
         att_ba2 = self.ba2([f1_ap, f3_ap, f4_ap], f2_ap)
         att_ba3 = self.ba3([f1_ap, f2_ap, f4_ap], f3_ap)
@@ -1352,7 +1388,7 @@ class CSSA_1(nn.Module):
         f3_c2 = f3_c * att_ba3
         f4_c2 = f4_c * att_ba4
 
-        # CAM2
+        # # attention2
         f1_ap2 = self.feature_extraction(f1_c2)
         f2_ap2 = self.feature_extraction(f2_c2)
         f3_ap2 = self.feature_extraction(f3_c2)
@@ -1368,7 +1404,6 @@ class CSSA_1(nn.Module):
         f3_ba2 = f3_c * att_ba3_2
         f4_ba2 = f4_c * att_ba4_2
 
-        # SAM
         att_sa1_2 = self.sa1_2(f1_ba2, f2_ba2, f3_ba2, f4_ba2)
         att_sa2_2 = self.sa2_2(f1_ba2, f2_ba2, f3_ba2, f4_ba2)
         att_sa3_2 = self.sa3_2(f1_ba2, f2_ba2, f3_ba2, f4_ba2)
@@ -1378,11 +1413,12 @@ class CSSA_1(nn.Module):
         result2 = f2_c2 * att_sa2_2
         result3 = f3_c2 * att_sa3_2
         result4 = f4_c2 * att_sa4_2
-        
+
         # concat
-        concat =torch.cat((result1, result2, result3, result4), dim=1)
+        concat = torch.cat((result1, result2, result3, result4), dim=1)
 
         concat = self.softmax_conv(concat)
         result = self.conv3x3(concat)
 
         return result
+
