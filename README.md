@@ -45,8 +45,10 @@ Application Scenarios of Traffic Sign Detection in advanced driver-assistance sy
 ![network](fig/Network.png)
 **YOLO-LLTS architecture.** Framework overview of our model YOLO-LLTS.
 
-## code
-### Requirements
+## 👐 Hands-On Guide
+Use our YOLO-LLTS and CNTSSS Dataset in 6 Effortless Steps
+
+### Step 1 — Requirements
 * python 3.8
 * torch 1.11.0
 * torchvision 0.12.0
@@ -54,19 +56,50 @@ Application Scenarios of Traffic Sign Detection in advanced driver-assistance sy
 To install requirements: 
 ```
 pip install -r requirements.txt
+pip install opencv-python psutil tqdm timm einops
 ```
 
-### Training
-If you want to train the model:
+### Step 2 – Downloading the Dataset
+The CNTSSS dataset can be downloaded using the link provided above, with two download methods: Google Drive and Baidu Cloud. The extraction code for Baidu Cloud is attached next to the link.
+
+### Step 3 - Modifying the Dataset Configuration File
+
+If you are using the CNTSSS dataset, you can directly use the provided cntsss.yaml. If you want to use a different dataset, you need to refer to cntsss.yaml and create your_dataset.yaml, including the dataset location and classification information.
+
+### Step 4 - Training
+If you want to train the model, you need to modify the dataset and parameter settings in train.py according to your task. Our model configuration is stored in the YOLO-LLTS.yaml file, and then:
 ```python
 python train.py
 ```
-### Testing
-If you want to test the model:
+### Step 5 - Testing
+If you want to test the model, you need to replace it with the recently trained model in the test.py file, and then:
 ```python
 python test.py
 ```
-Our trained weights for different datasets are listed in the "weight" folder.
+
+If you want the pre-trained models we have on different datasets, you can download them via the link below:
+
+<table>
+<tbody>
+  <tr>
+    <th>Google Drive</th>
+    <th colspan="2"> <a href="https://drive.google.com/file/d/1put5JFC7hJZf-pK1O1O-LUY7B_XJQTT_/view?usp=drive_link">Download</a> </th>
+  </tr>
+   <tr>
+    <th>Baidu Cloud</th>
+    <th colspan="2"> <a href="https://pan.baidu.com/s/17iP5WHWGpP0jRugs_8XHrg">Download</a> (Extraction code: abfp)</th> 
+  </tr>
+</tbody>
+</table>
+
+### Step 6 - Detecting
+If you want to use the trained weights to detect objects, modify the weights and dataset location in the detect.py file, and then:
+```python
+python detect.py
+```
+
+🎉 That’s all—train, test, and detect.
+
 
 ## Experiment result
 ![result1](fig/result1.png)
