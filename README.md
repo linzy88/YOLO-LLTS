@@ -107,12 +107,16 @@ python detect.py
 ## Citation
 If you use YOLO-LLTS or CNTSSS dataset, please consider citing:
 ```
-@article{lin2025yolollts,
-  title={YOLO-LLTS: Real-Time Low-Light Traffic Sign Detection via Prior-Guided Enhancement and Multi-Branch Feature Interaction},
+@ARTICLE{11146662,
   author={Lin, Ziyu and Wu, Yunfan and Ma, Yuhang and Chen, Junzhou and Zhang, Ronghui and Wu, Jiaming and Yin, Guodong and Lin, Liang},
-  journal={arXiv preprint arXiv:2503.13883},
-  year={2025}
-}
+  journal={IEEE Transactions on Instrumentation and Measurement}, 
+  title={YOLO-LLTS: Real-Time Low-Light Traffic Sign Detection via Prior-Guided Enhancement and Multibranch Feature Interaction}, 
+  year={2025},
+  volume={74},
+  number={},
+  pages={1-18},
+  keywords={Feature extraction;Object detection;Training;Lighting;Image enhancement;Real-time systems;Image edge detection;Data mining;Accuracy;Noise;Edge device deployment;end-to-end algorithm;low-light conditions;traffic sign dataset;traffic sign detection},
+  doi={10.1109/TIM.2025.3604925}}
 ```
 
 ## Contact
